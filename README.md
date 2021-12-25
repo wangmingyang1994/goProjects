@@ -17,8 +17,8 @@ BMP、FatRate的计算\
 说明：\
 作业1：老师的lib库github.com/armstrongli/learn.go，fork完引入不成功，所以使用了自己的库作为lib库进行replace，具体方法如下：\
 lib库：github.com/wangmingyang1994/golearn中fatRate目录下fatRateCalc.go文件中体脂计算功能缺失，通过使用了replace功能，将本地目录staging/src/github.com/wangmingyang1994/golearn/fatRate/fatRateCalc.go改写，将体脂计算功能完善，并在本工程中（goProjects/FatRateCalc/calcFatRate.go）优化了输入方式，使用cobra包的功能后进行调用\
-体脂率功能验证命令：
-执行目录： 主目录 => goProjects
+体脂率功能验证命令：\
+执行目录： 主目录 => goProjects\
 执行命令： go run main.go --name dandy --sex 男 --tall 1.8 --weight 60 --age 20\
 作业2：因体脂计算功能在staging/src/github.com/wangmingyang1994/golearn/fatRate/fatRateCalc.go中实现，便将验证逻辑写在了同一目录下\
 其中：\
@@ -26,7 +26,7 @@ TestGetBMI方法验证BMI计算逻辑\
 TestGetFatRate方法验证体脂的计算逻辑\
 TestGetSuggestion方法建议逻辑\
 体脂计算测试文件验证命令：\
-执行目录：staging/src/github.com/wangmingyang1994/golearn/fatRate
+执行目录：staging/src/github.com/wangmingyang1994/golearn/fatRate\
 执行命令：\
 cd staging/src/github.com/wangmingyang1994/golearn/fatRate\
 go test . 或 go test -coverprofile=c.out
