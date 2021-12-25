@@ -1,13 +1,33 @@
 作业：\
-1.使用github的公有函数来实现功能\
-2.自己重写BMI计算器、体脂计算器，用module replace替换github上的\
-3.使用vendor为项目依赖提供保障
+1.使用github上的lib：github.com/armstrongli/learn.go 完成体脂计算器\
+本地添加module的replace，并在本地项目扩展 github.com/armstrongli/learn.go 以支持
+BMP、FatRate的计算\
+使用 vendor 保证代码的完整性与可运行\
+2.1）为体脂计算器编写单元测试并完善体脂计算器的验证逻辑\
+• BMI计算\
+录入正常身高、体重，确保计算结果符合预期\
+录入0或负数身高，返回错误\
+录入0或负数体重，返回错误\
+2）为体脂计算器编写单元测试并完善体脂计算器的验证逻辑\
+• 体脂率计算\
+录入正常BMI、年龄、性别，确保计算结果符合预期\
+录入非法BMI、年龄、性别(0、负数、超过150的年龄、非男女的性别输入)，返回错误\
+录入完整的性别、年龄、身高、体重，确保最终获得的健康建议符合预期\
 
 说明：\
-1.使用github的公有函数实现录入，在goModTry/completeFatRate/newFateRate/newFateRate.go中，使用cobra命令行工具实现录入功能\
-2.在本地（fatRateCalc/fatRate.go）中重写了BMI计算器和体脂计算器\
-3.在go.mod(module goProjects/goModTry)使用了replace功能引入了其他go.mod(module goProjects/FatRateCalc)中的功能\
-4.在goModTry/completeFatRate/main.go中调用程序，实现体脂计算并输出到控制台\
-执行目录： cd goModTry/completeFatRate\
+作业1：老师的lib库github.com/armstrongli/learn.go，fork完引入不成功，所以使用了自己的库作为lib库进行replace，具体方法如下：\
+lib库：github.com/wangmingyang1994/golearn中fatRate目录下fatRateCalc.go文件中体脂计算功能缺失，通过使用了replace功能，将本地目录staging/src/github.com/wangmingyang1994/golearn/fatRate/fatRateCalc.go改写，将体脂计算功能完善，并在本工程中（goProjects/FatRateCalc/calcFatRate.go）优化了输入方式，使用cobra包的功能后进行调用\
+体脂率功能验证命令：
+执行目录： 主目录 => goProjects
 执行命令： go run main.go --name dandy --sex 男 --tall 1.8 --weight 60 --age 20\
-5.使用了vendor命令在module goProjects/goModTry中生成了vender目录
+作业2：因体脂计算功能在staging/src/github.com/wangmingyang1994/golearn/fatRate/fatRateCalc.go中实现，便将验证逻辑写在了同一目录下\
+其中：\
+TestGetBMI方法验证BMI计算逻辑\
+TestGetFatRate方法验证体脂的计算逻辑\
+TestGetSuggestion方法建议逻辑\
+体脂计算测试文件验证命令：\
+执行目录：staging/src/github.com/wangmingyang1994/golearn/fatRate
+执行命令：\
+cd staging/src/github.com/wangmingyang1994/golearn/fatRate\
+go test . 或 go test -coverprofile=c.out
+

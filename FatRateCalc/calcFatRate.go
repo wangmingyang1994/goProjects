@@ -1,13 +1,14 @@
-package newFateRate
+package FatRateCalc
 
 import (
 	"fmt"
 	"github.com/spf13/cobra"
-	g "goProjects/FatRateCalc"
+	fatRates "github.com/wangmingyang1994/golearn/fatRate"
 )
 
-func InputfateRate() (name string, fatRate float64) {
+func InputPrintfateRate() {
 	var (
+		name   string
 		sex    string
 		tall   float64
 		weight float64
@@ -33,12 +34,18 @@ func InputfateRate() (name string, fatRate float64) {
 	cmd.Flags().IntVar(&age, "age", 0, "年龄")
 	//执行命令
 	cmd.Execute()
-	//使用本地体脂率计算实现
-	bmi := g.GetBMI(weight, tall)
-	if sex == "男" {
-		fatRate := g.GetmanFatRate(bmi, age)
-		return name, fatRate
+	//使用替换后的本地体脂率计算实现
+	bmi, err := fatRates.GetBMI(tall, weight)
+	if err != nil {
+		fmt.Println(err)
+		return
 	}
-	return name, g.GetwomanFatRate(bmi, age)
+	f, err1 := fatRates.GetFatRate(bmi, age, sex)
+	if err1 != nil {
+		fmt.Println(err1)
+		return
+	}
+	suggest := fatRates.GetSuggestion(sex, age, f)
+	fmt.Printf("哈喽%s!您的体脂率是：%f,%s", name, f, suggest)
 
 }
