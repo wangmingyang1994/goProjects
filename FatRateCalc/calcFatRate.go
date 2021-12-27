@@ -3,7 +3,7 @@ package FatRateCalc
 import (
 	"fmt"
 	"github.com/spf13/cobra"
-	fatRates "github.com/wangmingyang1994/golearn/fatRate"
+	"github.com/armstrongli/go-bmi"
 )
 
 func InputPrintfateRate() {
@@ -35,17 +35,17 @@ func InputPrintfateRate() {
 	//执行命令
 	cmd.Execute()
 	//使用替换后的本地体脂率计算实现
-	bmi, err := fatRates.GetBMI(tall, weight)
+	bmi, err := go_bmi.GetBMI(tall, weight)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	f, err1 := fatRates.GetFatRate(bmi, age, sex)
+	f, err1 := go_bmi.GetFatRate(bmi, age, sex)
 	if err1 != nil {
 		fmt.Println(err1)
 		return
 	}
-	suggest := fatRates.GetSuggestion(sex, age, f)
-	fmt.Printf("哈喽%s!您的体脂率是：%f,%s", name, f, suggest)
+	suggest := go_bmi.GetSuggestion(sex, age, f)
+	fmt.Printf("哈喽%s!您的体脂率是：%f。您的体脂建议是：%s", name, f, suggest)
 
 }

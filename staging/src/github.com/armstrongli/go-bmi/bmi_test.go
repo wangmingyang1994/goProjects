@@ -1,8 +1,9 @@
-package fatRate
+package go_bmi
+
 
 import (
-	"fmt"
-	"testing"
+"fmt"
+"testing"
 )
 
 //• 为体脂计算器编写单元测试并完善体脂计算器的验证逻辑

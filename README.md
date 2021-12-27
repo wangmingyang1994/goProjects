@@ -1,7 +1,7 @@
 作业：\
-1.使用github上的lib：github.com/armstrongli/learn.go 完成体脂计算器\
-本地添加module的replace，并在本地项目扩展 github.com/armstrongli/learn.go 以支持
-BMP、FatRate的计算\
+1.使用github上的lib：github.com/armstrongli/go-bmi 完成体脂计算器\
+本地添加module的replace，并在本地项目扩展 github.com/armstrongli/go-bmi以支持
+BMI、FatRate的计算\
 使用 vendor 保证代码的完整性与可运行\
 2.1）为体脂计算器编写单元测试并完善体脂计算器的验证逻辑\
 • BMI计算\
@@ -15,19 +15,19 @@ BMP、FatRate的计算\
 录入完整的性别、年龄、身高、体重，确保最终获得的健康建议符合预期\
 
 说明：\
-作业1：老师的lib库github.com/armstrongli/learn.go，fork完引入不成功，所以使用了自己的库作为lib库进行replace，具体方法如下：\
-lib库：github.com/wangmingyang1994/golearn中fatRate目录下fatRateCalc.go文件中体脂计算功能缺失，通过使用了replace功能，将本地目录staging/src/github.com/wangmingyang1994/golearn/fatRate/fatRateCalc.go改写，将体脂计算功能完善，并在本工程中（goProjects/FatRateCalc/calcFatRate.go）优化了输入方式，使用cobra包的功能后进行调用\
+作业1：lib库：github.com/armstrongli/go-bmi 中go-bmi.go文件中体脂计算功能缺失，通过使用了replace功能，将本地目录staging/src/github.com/armstrongli/go-bmi 改写，将体脂计算功能完善，并在本工程中（goProjects/FatRateCalc/calcFatRate.go）优化了输入方式，使用cobra包的功能后进行调用\
 体脂率功能验证命令：\
 执行目录： 主目录 => goProjects\
 执行命令： go run main.go --name dandy --sex 男 --tall 1.8 --weight 60 --age 20\
-作业2：因体脂计算功能在staging/src/github.com/wangmingyang1994/golearn/fatRate/fatRateCalc.go中实现，便将验证逻辑写在了同一目录下\
+作业2：因体脂计算功能在staging/src/github.com/armstrongli/go-bmi 中实现，便将验证逻辑写在了同一目录下\
 其中：\
 TestGetBMI方法验证BMI计算逻辑\
 TestGetFatRate方法验证体脂的计算逻辑\
 TestGetSuggestion方法建议逻辑\
+测试函数中使用表格驱动测试的方法，将输入条件及预期结果封装到struct中\
 体脂计算测试文件验证命令：\
-执行目录：staging/src/github.com/wangmingyang1994/golearn/fatRate\
+执行目录：staging/src/github.com/armstrongli/go-bmi\
 执行命令：\
-cd staging/src/github.com/wangmingyang1994/golearn/fatRate\
+cd staging/src/github.com/armstrongli/go-bmi\
 go test . 或 go test -coverprofile=c.out
 

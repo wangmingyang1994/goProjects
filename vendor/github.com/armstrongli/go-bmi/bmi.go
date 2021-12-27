@@ -1,4 +1,4 @@
-package fatRate
+package go_bmi
 
 import "fmt"
 
