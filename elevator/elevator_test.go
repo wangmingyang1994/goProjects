@@ -15,12 +15,11 @@ func TestCost1(t *testing.T) {
 		false,
 		false,
 	}
-	passagers := []Passenger{
-	}
+	passagers := []Passenger{}
 	e1.Get(passagers)
 	result := e1.Cost()
-	if len(result) != 0{
-		t.Fatalf("expect 0,but got%d",result)
+	if len(result) != 0 {
+		t.Fatalf("expect 0,but got%d", result)
 	}
 
 }
@@ -35,12 +34,12 @@ func TestCost2(t *testing.T) {
 		false,
 	}
 	passagers := []Passenger{
-		{3,3},
+		{3, 3},
 	}
 	e1.Get(passagers)
 	result := e1.Cost()
-	if result[0] != 3{
-		t.Fatalf("expect 0,but got%d",result)
+	if result[0] != 3 {
+		t.Fatalf("expect 0,but got%d", result)
 	}
 
 }
@@ -56,16 +55,16 @@ func TestCost3(t *testing.T) {
 		false,
 	}
 	passagers := []Passenger{
-		{3,4},
-		{3,2},
+		{3, 4},
+		{3, 2},
 	}
 	e1.Get(passagers)
 	result := e1.Cost()
 	expect := []int{
-		3,4,2,
+		3, 4, 2,
 	}
-	for i,v :=  range result{
-		if v!=expect[i]{
+	for i, v := range result {
+		if v != expect[i] {
 			t.Fail()
 		}
 	}
@@ -83,20 +82,19 @@ func TestCost4(t *testing.T) {
 		false,
 	}
 	passagers := []Passenger{
-		{3,4},
-		{3,5},
-		{3,2},
+		{3, 4},
+		{3, 5},
+		{3, 2},
 	}
 	e1.Get(passagers)
 	result := e1.Cost()
 	expect := []int{
-		3,4,5,2,
+		3, 4, 5, 2,
 	}
-	for i,v :=  range result{
-		if v!=expect[i]{
+	for i, v := range result {
+		if v != expect[i] {
 			t.Fail()
 		}
 	}
 
 }
-

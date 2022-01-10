@@ -25,7 +25,7 @@ func (e *Elevator) Get(p []Passenger) {
 		fmt.Println("电梯闲置")
 		return
 	}
-	if p[0].Now-e.Floor >  0 {
+	if p[0].Now-e.Floor > 0 {
 		e.Targets = append(e.Targets, p[0].Now)
 		e.TargetsUp = true
 	} else {
