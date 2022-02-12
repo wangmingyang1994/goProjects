@@ -2,8 +2,8 @@ package FatRateCalc
 
 import (
 	"fmt"
-	"github.com/spf13/cobra"
 	"github.com/armstrongli/go-bmi"
+	"github.com/spf13/cobra"
 )
 
 func InputPrintfateRate() {
