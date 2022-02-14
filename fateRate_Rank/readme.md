@@ -33,8 +33,8 @@
 
 A.查看1000人插入排行榜，随后不断更新排行榜和不断查询排行的效果（使用goland运行）\
 切换到目录：fateRate_Rank/rankOfFateRate_channel\
-运行函数：TestRankOfFateRate
-或
+运行函数：TestRankOfFateRate\
+或\
 切换到目录：fateRate_Rank/rankOfFateRate_sync\
 运行函数：TestRankOfFateRate
 
@@ -42,6 +42,7 @@ B.查看单用户插入排行榜和更新排行榜的效果\
 （插入两个用户：用户2的体脂率大于用户1，则排名为：用户1，用户2；\
 更新用户2的体脂率更新为比用户1小的体脂率，此时用户2 的排名为1，总排名为：用户2，用户1）\
 cd fateRate_Rank/rankOfFateRate_channel\
-go run channelRank.go
-或
+go run channelRank.go\
+或\
 cd fateRate_Rank/rankOfFateRate_sync\
+go run syncRank.go 
