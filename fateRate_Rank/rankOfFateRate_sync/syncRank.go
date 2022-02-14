@@ -23,8 +23,8 @@ func InitPerson(name string, faterate float64, ranks *RankOfFateRate) {
 }
 
 type RankOfFateRate struct {
-	Data   []Person
-	Locker sync.Mutex
+	Data []Person
+	sync.Mutex
 }
 
 func (r *RankOfFateRate) Insert(p Person) (rankNum int) {
@@ -33,15 +33,16 @@ func (r *RankOfFateRate) Insert(p Person) (rankNum int) {
 		fmt.Printf("%s的体脂率%f不符合规则！请重试\n", p.Name, p.FateRate)
 		return
 	}
-	r.Locker.Lock()
-	defer r.Locker.Unlock()
+	r.Lock()
+	defer r.Unlock()
 	//将用户加入排行榜
 	r.Data = append(r.Data, p)
 	//重新排序
 	r.SortRank()
 	//返回插入用户的排行
 	rankNum, _ = r.Search(p.Id)
-	fmt.Printf("插入成功！%s的排行是第%d，体脂率是%f\n", p.Name, rankNum, p.FateRate)
+	fmt.Println(p.Name, "插入成功！")
+	//fmt.Printf("插入成功！%s的排行是第%d，体脂率是%f\n", p.Name, rankNum, p.FateRate)
 	return rankNum
 }
 
@@ -52,17 +53,18 @@ func (r *RankOfFateRate) SortRank() {
 	})
 }
 
-func (r *RankOfFateRate) Search(id int) (num int, fateRate float64) {
+func (r *RankOfFateRate) Search(id int) (rankNum int, person Person) {
 	//遍历排行榜，按ID查询到用户，获取其排行和体脂率并返回
 	for i, v := range r.Data {
 		if v.Id != id {
 			continue
 		}
-		num = i + 1
-		fateRate = v.FateRate
+		rankNum = i + 1
+		person = v
 		break
 	}
-	return num, fateRate
+	//fmt.Printf("查询到用户%s的排名是%d\n",person.Name,rankNum)
+	return rankNum, person
 
 }
 
@@ -73,8 +75,8 @@ func (r *RankOfFateRate) Update(id int, fateRate float64) (rankNum int) {
 		return 0
 	}
 	//遍历,查询到要更改的ID，并更改其体脂率
-	r.Locker.Lock()
-	defer r.Locker.Unlock()
+	r.Lock()
+	defer r.Unlock()
 	for i := 0; i < len(r.Data); i++ {
 		if r.Data[i].Id != id {
 			continue
@@ -84,20 +86,11 @@ func (r *RankOfFateRate) Update(id int, fateRate float64) (rankNum int) {
 	}
 	//更改完成，重新排序，并返回当前用户的排行
 	r.SortRank()
-	rankNum, _ = r.Search(id)
-	fmt.Printf("更新成功！排行是第%d，体脂率是%f\n", rankNum, fateRate)
+	rankNum, p := r.Search(id)
+	//fmt.Printf("更新成功！%s排行是第%d，体脂率是%f\n", v.Name, rankNum, fateRate)
+	fmt.Println(p.Name, "更新成功！")
 	return rankNum
 }
-
-//func (r *RankOfFateRate) Delete(id int){
-//	//遍历排行榜，按ID找到用户，并将其在slice中删除
-//	for i,v := range r.Data{
-//		if v.Id !=id{
-//			continue
-//		}
-//		r.Data = append(r.Data[i:],r.Data[i+1:]...)
-//	}
-//}
 
 func MockInsert(n int, rank *RankOfFateRate, wg *sync.WaitGroup) {
 	//初始化用户名
@@ -128,9 +121,9 @@ func MockUpdate(rank *RankOfFateRate, id int, wg *sync.WaitGroup) {
 		x := rand.Intn(10)
 		var newFateRate float64
 		if x%2 == 0 {
-			newFateRate = v + add
+			newFateRate = v.FateRate + add
 		} else {
-			newFateRate = v - add
+			newFateRate = v.FateRate - add
 		}
 		//判断新生成的体脂率，若符合规范则直接更新，否则重新生成
 		if newFateRate < 0 || newFateRate > 0.4 {

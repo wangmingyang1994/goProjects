@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"math/rand"
 	"sync"
 	"testing"
@@ -26,6 +27,10 @@ func TestRankOfFateRate(t *testing.T) {
 		for i := 0; i < 1000; i++ {
 			wg.Add(1)
 			go MockUpdate(rank, i, &wg)
+			go func() {
+				rankNum, p := rank.Search(i)
+				fmt.Printf("查询到用户%s的排名是%d\n", p.Name, rankNum)
+			}()
 			wg.Wait()
 		}
 	}
