@@ -8,7 +8,7 @@
 如下：\
 //sort := Bubble{}\
 //sort := Quick{}\
-3.writer.writer中实现了文件写入的方法，默认在上一层级的文件夹中生成initLog文件，将注册信息保存到此文件中
+3.writer.writer中实现了文件写入的方法，默认在上一层级的文件夹中生成initLog文件，将注册信息保存到此文件中\
 4.快速测试：\
 cd IoRanker\
 go run main.go
