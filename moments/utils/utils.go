@@ -16,7 +16,6 @@ const (
 	DATABASE = "test"
 )
 
-
 func SqlConn() *sql.DB {
 	// 连接数据库后返回DB
 	dsn := fmt.Sprintf("%s:%s@%s(%s:%d)/%s", USERNAME, PASSWORD, NETWORK, SERVER, PORT, DATABASE)

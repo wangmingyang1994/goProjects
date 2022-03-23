@@ -4,79 +4,79 @@ import (
 	"fmt"
 	"goProjects/moments/utils"
 )
-type Person struct{
-	PersonId int `form:"personId"`
-	Name string  `form:"name"`
-	Sex string  `form:"sex"`
-	Age int `form:"age"`
-	Tall float64 `form:"tall"`
-	Weight float64 `form:"weight"`
-    FatRate float64 `form:"fatRate"`
+
+type Person struct {
+	PersonId int     `form:"personId"`
+	Name     string  `form:"name"`
+	Sex      string  `form:"sex"`
+	Age      int     `form:"age"`
+	Tall     float64 `form:"tall"`
+	Weight   float64 `form:"weight"`
+	FatRate  float64 `form:"fatRate"`
 }
 
-func (person *Person)NewPerson()(int, error){
+func (person *Person) NewPerson() (int, error) {
 	// 初始化用户到数据库
 	// 计算出体脂率
 	bmi, err := utils.GetBMI(person.Tall, person.Weight)
-	if err!=nil{
+	if err != nil {
 		return 0, err
 	}
 	fatRate, err := utils.GetFatRate(bmi, person.Age, person.Sex)
-	if err!=nil{
+	if err != nil {
 		return 0, err
 	}
 	// 连接数据库
 	DB := utils.SqlConn()
 	defer DB.Close()
 	// 数据库插入用户
-	_,errs :=DB.Exec("insert into persons(name, sex, age,tall, weight, fatRate) values(?,?,?,?,?,?);",
-	person.Name, person.Sex, person.Age,person.Tall, person.Weight, fatRate)
-    if errs!=nil{
-		e:= fmt.Errorf("插入用户失败:%v\n",errs)
-        return 0,e 
-    }
+	_, errs := DB.Exec("insert into persons(name, sex, age,tall, weight, fatRate) values(?,?,?,?,?,?);",
+		person.Name, person.Sex, person.Age, person.Tall, person.Weight, fatRate)
+	if errs != nil {
+		e := fmt.Errorf("插入用户失败:%v\n", errs)
+		return 0, e
+	}
 	// 获取用户ID，并返回
 	var personId int
 	row1 := DB.QueryRow("select personId from persons where name=?", person.Name)
-    if err := row1.Scan(&personId); err != nil {
-        e:= fmt.Errorf("写入peronId失败:%v\n",err)
-        return 0,e
-    }
+	if err := row1.Scan(&personId); err != nil {
+		e := fmt.Errorf("写入peronId失败:%v\n", err)
+		return 0, e
+	}
 	return personId, nil
 }
 
-type States struct{
-	StatesId int `form:"statesId" json:"statesId"`
-	Content string `form:"content" json:"content"`
-	CreateTime string `form:"createTime" json:"createTime"`
-	AuthorId int `form:"authorId" json:"authorId"`
-	AuthorName string `form:"authorName" json:"authorName"`
-	AuthorAge int `form:"authorAge" json:"authorAge"`
-	AuthorTall float64 `form:"authorTall" json:"authorTall"`
-	AuthorWeight float64 `form:"authorWeight" json:"authorWeight"`
-    AuthorFatRate float64 `form:"authorFatRate" json:"authorFatRate"`
+type States struct {
+	StatesId      int     `form:"statesId" json:"statesId"`
+	Content       string  `form:"content" json:"content"`
+	CreateTime    string  `form:"createTime" json:"createTime"`
+	AuthorId      int     `form:"authorId" json:"authorId"`
+	AuthorName    string  `form:"authorName" json:"authorName"`
+	AuthorAge     int     `form:"authorAge" json:"authorAge"`
+	AuthorTall    float64 `form:"authorTall" json:"authorTall"`
+	AuthorWeight  float64 `form:"authorWeight" json:"authorWeight"`
+	AuthorFatRate float64 `form:"authorFatRate" json:"authorFatRate"`
 }
 
-func NewStates(personId int, content string)(int, error){
+func NewStates(personId int, content string) (int, error) {
 	// 连接数据库，插入消息到数据库
 	DB := utils.SqlConn()
 	defer DB.Close()
 	//插入动态
-	_,errs :=DB.Exec("insert into test.states(personId, content) values(?,?);",personId,content)
-    if errs!=nil{
-		e:= fmt.Errorf("插入动态失败:%v\n",errs)
-        return 0,e
-    }
+	_, errs := DB.Exec("insert into test.states(personId, content) values(?,?);", personId, content)
+	if errs != nil {
+		e := fmt.Errorf("插入动态失败:%v\n", errs)
+		return 0, e
+	}
 	//获取statesId，并返回
 	var statesId int
-	row1 := DB.QueryRow("select statesId from states where personId=? and content=?", personId,content)
-    if err := row1.Scan(&statesId); err != nil {
-        e:= fmt.Errorf("写入statesId失败:%v\n",err)
-        return 0,e
-    }
-	return statesId,nil
+	row1 := DB.QueryRow("select statesId from states where personId=? and content=?", personId, content)
+	if err := row1.Scan(&statesId); err != nil {
+		e := fmt.Errorf("写入statesId失败:%v\n", err)
+		return 0, e
+	}
+	return statesId, nil
 }
-
 
 func DeleteStates(personId string, contentId string) error {
 	// 删除用户，根据用户ID和消息ID，将用户可见置为否
@@ -85,12 +85,11 @@ func DeleteStates(personId string, contentId string) error {
 	_, errs := DB.Exec("update test.states set visable=false where statesId=? and personId=?",
 		contentId, personId)
 	if errs != nil {
-		e := fmt.Errorf("删除动态失败:%v\n",errs)
+		e := fmt.Errorf("删除动态失败:%v\n", errs)
 		return e
 	}
 	return nil
 }
-
 
 func GetAllStates() ([]States, error) {
 	//连接数据库，获取所有的动态

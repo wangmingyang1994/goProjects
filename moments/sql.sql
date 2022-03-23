@@ -17,7 +17,6 @@ create table persons(
     `weight` float not null,
     `fatRate` float,
     `createTime` datetime not null default current_timestamp,
-    `updateTime` datetime not null default current_timestamp, 
     primary key (`personId`)
 )engine =InnoDB default charset =utf8mb4;
 
@@ -28,7 +27,7 @@ create table states(
     `personId` int not null,
     `content` varchar(255) not null,
     `visable` bool not null default true,
-    `createTime` datetime not null default current_timestamp ,
+    `createTime` datetime not null default current_timestamp,
     PRIMARY KEY(`statesId`),
     index emp_id (`personId`),
     foreign key (`personId`) references persons (`personId`)
