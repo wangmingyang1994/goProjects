@@ -1,7 +1,7 @@
 模块介绍\
-1.utils 提供公共方法（SQL连接，计算BMI及体脂率）\
-2.states 方法实现\
-3.server 服务实现\
+1.utils/utils.go 提供公共方法（SQL连接，计算BMI及体脂率）\
+2.states/states.go 方法实现\
+3.server.go 服务实现\
 4.sql 建表语句
 
 功能介绍\
