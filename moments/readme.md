@@ -20,8 +20,8 @@ curl -X POST  "http://127.0.0.1:8081/addMoments" -d "personId=1&content=i am xia
 3.删除动态接口：使用form/data传递参数\
 curl -X POST  "http://127.0.0.1:8081/deleteMoments" -d "personId=1&statesId=1"\
 4.获取所有动态接口\
-curl -X GET  "http://127.0.0.1:8081/getAllMoments"\
+curl -X GET  "http://127.0.0.1:8081/getAllMoments" \
 5.获取单一用户的所有动态接口：使用params传递参数\
-curl -X GET  "http://127.0.0.1:8081/getMyMoments?personId=1"\
+curl -X GET  "http://127.0.0.1:8081/getMyMoments?personId=1" \
 6.获取一条指定动态接口：使用params传递参数\
 curl -X GET  "http://127.0.0.1:8081/getMoment?statesId=4"
