@@ -16,6 +16,8 @@ create table persons(
     `tall` float not null,
     `weight` float not null,
     `fatRate` float,
+    `createTime` datetime not null default current_timestamp,
+    `updateTime` datetime not null default current_timestamp, 
     primary key (`personId`)
 )engine =InnoDB default charset =utf8mb4;
 
