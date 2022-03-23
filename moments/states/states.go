@@ -141,7 +141,7 @@ func GetMyStates(personId int) ([]States, error) {
 	return moments, nil
 }
 
-func GetMoments(statesId int) ([]States, error) {
+func GetStates(statesId int) ([]States, error) {
 	//连接数据库，根据动态ID获取某条动态
 	DB := utils.SqlConn()
 	defer DB.Close()

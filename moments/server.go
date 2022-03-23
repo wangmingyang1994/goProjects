@@ -40,12 +40,12 @@ func InitUser(c *gin.Context) {
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"status": "failed",
-			"msg":    err,
+			"msg":    "注册失败",
 		})
 		return
 	} else {
 		c.JSON(http.StatusOK, gin.H{
-			"status":   "succeed",
+			"status":   "success",
 			"msg":      "注册成功!",
 			"personId": personId,
 		})
@@ -70,12 +70,12 @@ func AddMoment(c *gin.Context) {
 	if err3 != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"status": "failed",
-			"msg":    err,
+			"msg":    "发送动态失败！",
 		})
 		return
 	} else {
 		c.JSON(http.StatusOK, gin.H{
-			"status":   "succeed",
+			"status":   "success",
 			"msg":      "动态发送成功!",
 			"statesId": statesId,
 		})
@@ -84,7 +84,7 @@ func AddMoment(c *gin.Context) {
 
 func DeleteMoments(c *gin.Context) {
 	personId,b := c.GetPostForm("personId")
-	contentId,b1 := c.GetPostForm("contentId")
+	contentId,b1 := c.GetPostForm("statesId")
 	if !b || !b1{
 		c.JSON(http.StatusBadRequest, gin.H{
 			"status": "failed",
@@ -96,12 +96,12 @@ func DeleteMoments(c *gin.Context) {
 	if err:=states.DeleteStates(personId, contentId);err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"status": "failed",
-			"msg":    err,
+			"msg":    "删除动态失败",
 		})
 		return
 	} else {
 		c.JSON(http.StatusOK, gin.H{
-			"status": "succeed",
+			"status": "success",
 			"msg":    "动态删除成功!",
 		})
 	}
@@ -113,12 +113,12 @@ func GetAllMoments(c *gin.Context) {
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"status": "failed",
-			"msg":    err,
+			"msg":    "获取动态失败！",
 		})
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{
-		"status": "succeed",
+		"status": "success",
 		"data":   moments,
 	})
 }
@@ -130,7 +130,7 @@ func GetMyMoments(c *gin.Context) {
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"status": "failed",
-			"msg":    "获取用户状态失败！",
+			"msg":    "获取用户动态失败！",
 		})
 	} else {
 		c.JSON(200, gin.H{
@@ -145,16 +145,16 @@ func GetMyMoments(c *gin.Context) {
 func GetMoment(c *gin.Context) {
 	momentId, _ := strconv.Atoi(c.Query("statesId"))
 	var moments []states.States
-	moments, err := states.GetMoments(momentId)
+	moments, err := states.GetStates(momentId)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"status": "failed",
-			"msg":    err,
+			"msg":    "获取动态失败！",
 		})
 	} else {
 		c.JSON(http.StatusOK, gin.H{
 			"status": "success",
-			"msg":    "获取状态成功！",
+			"msg":    "获取动态成功！",
 			"data":   moments,
 		})
 	}
