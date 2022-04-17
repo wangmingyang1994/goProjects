@@ -1,0 +1,45 @@
+syntax = "proto3";
+option go_package="./chat";
+import "google/protobuf/timestamp.proto";
+
+
+message RequestRoom{
+  int32 myId =1;
+  int32 targetId=2;
+}
+message Room{
+  int32 roomId=1;
+}
+
+message ChatMsg{
+  int32 userId=1;
+  string userName=2;
+  string chatMessage=3;
+  string CreateTime = 4;
+  int32 MessageId=5;
+}
+
+message ChatMsgs{
+  repeated ChatMsg chatMessages=1;
+}
+message RequestSendChatMsg{
+  int32 roomId=1;
+  int32 myId=2;
+  string chatMessage=3;
+  google.protobuf.Timestamp CreateTime = 4;
+}
+
+message GetNew{
+  int32 roomId=1;
+  int32 lastid=2;
+}
+message Empty{}
+
+service Chat{
+  rpc CreateChat(RequestRoom)returns(Room);//创建聊天室，返回聊天室ID
+  rpc GetRoom(RequestRoom)returns(Room);//查询是否已创建聊天室
+  rpc LoadHistory(Room)returns(ChatMsgs);//加载历史聊天记录
+  rpc SendChat(RequestSendChatMsg)returns(Empty);//发送聊天
+  rpc GetChat(GetNew)returns(ChatMsgs);//获取聊天
+}
+

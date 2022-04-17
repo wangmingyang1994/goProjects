@@ -1,0 +1,46 @@
+syntax = "proto3";
+option go_package="./user";
+
+
+//注册信息
+message UserRegister{
+  string userName = 1;//用户昵称
+  string password = 2;//密码
+}
+
+message UserLogin{
+  int32 userId = 1;//用户账号
+  string password = 2;//用户密码
+}
+
+message UserDetail{
+  int32 userId = 1;//用户账号
+  string userName = 2;//用户昵称
+  int32 status = 3;//用户状态 0未登录状态 1登录状态
+}
+
+message UserLogout{
+  int32 userId = 1;//用户账号
+}
+
+message Needusers{
+  int32 page =1;
+  int32 pagenums =2;
+}
+
+message UserInfos{
+  int32 total =1;
+  repeated UserDetail users=3;
+}
+//用户服务：使用用户昵称+密码注册，返回用户详细信息
+service UserService{
+  rpc SignUp(UserRegister) returns (UserDetail);//注册
+  rpc SignIn(UserLogin) returns (UserDetail);//登录
+  rpc Logout(UserLogout) returns (UserDetail);//退出登录
+  rpc GetUserInfos(Needusers)returns(UserInfos);//获取在线的用户列表
+}
+
+
+
+
+
