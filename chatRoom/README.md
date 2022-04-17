@@ -1,4 +1,4 @@
-聊天服务说明:\
+聊天服务说明:
 
 user服务:\
 SignUp(UserRegister) returns (UserDetail);//注册接口\
