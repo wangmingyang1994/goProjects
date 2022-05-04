@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
-	"learn.go/blog_service/pkg/setting"
+	"goProjects/blog_service/pkg/setting"
 	"time"
 )
 

@@ -2,8 +2,8 @@ package v1
 
 import (
 	"github.com/gin-gonic/gin"
-	"learn.go/blog_service/pkg/app"
-	"learn.go/blog_service/pkg/errcode"
+	"goProjects/blog_service/pkg/app"
+	"goProjects/blog_service/pkg/errcode"
 )
 
 type Article struct{}

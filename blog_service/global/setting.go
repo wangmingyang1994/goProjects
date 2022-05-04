@@ -1,8 +1,8 @@
 package global
 
 import (
-	"learn.go/blog_service/pkg/logger"
-	"learn.go/blog_service/pkg/setting"
+	"goProjects/blog_service/pkg/logger"
+	"goProjects/blog_service/pkg/setting"
 )
 
 var (

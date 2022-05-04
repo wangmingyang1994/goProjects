@@ -1,8 +1,8 @@
 package service
 
 import (
-	"learn.go/blog_service/internal/model"
-	"learn.go/blog_service/pkg/app"
+	"goProjects/blog_service/internal/model"
+	"goProjects/blog_service/pkg/app"
 )
 
 type CountTagRequest struct {

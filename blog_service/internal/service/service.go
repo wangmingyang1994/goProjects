@@ -2,8 +2,8 @@ package service
 
 import (
 	"context"
-	"learn.go/blog_service/global"
-	"learn.go/blog_service/internal/dao"
+	"goProjects/blog_service/global"
+	"goProjects/blog_service/internal/dao"
 )
 
 type Service struct{

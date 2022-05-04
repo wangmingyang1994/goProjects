@@ -2,7 +2,7 @@ package routers
 
 import (
 	"github.com/gin-gonic/gin"
-	v1 "learn.go/blog_service/internal/routers/api/v1"
+	v1 "goProjects/blog_service/internal/routers/api/v1"
 )
 
 

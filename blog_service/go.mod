@@ -1,4 +1,4 @@
-module learn.go/blog_service
+module goProjects/blog_service
 
 go 1.17
 

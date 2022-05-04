@@ -2,8 +2,8 @@ package app
 
 import (
 	"github.com/gin-gonic/gin"
-	"learn.go/blog_service/global"
-	"learn.go/blog_service/pkg/convert"
+	"goProjects/blog_service/global"
+	"goProjects/blog_service/pkg/convert"
 )
 
 func GetPage(c *gin.Context)int{

@@ -2,7 +2,7 @@ package app
 
 import (
 	"github.com/gin-gonic/gin"
-	"learn.go/blog_service/pkg/errcode"
+	"goProjects/blog_service/pkg/errcode"
 	"net/http"
 )
 
