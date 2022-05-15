@@ -2,18 +2,19 @@ package router
 
 import (
 	"github.com/gin-gonic/gin"
-	v1 "goProjects/bookManageSystem/router/api/v1"
+	"goProjects/bookManageSystem/router/api/v1"
+	"goProjects/bookManageSystem/utils"
 	"net/http"
 )
 
 
 func NewRouter () (*gin.Engine){
 	r:= gin.New()
-	r.Use(gin.Logger(),gin.Recovery())
+	r.Use(utils.GinLogger(),utils.GinRecovery(true))
 	r.GET("/", func(c *gin.Context) {
 		c.String(http.StatusOK,"hello~")
 	})
-	user:= v1.NewUser()
+	user := v1.NewUser()
 	userServer := r.Group("book/user")
 	{
 		userServer.POST("/sign", user.Sign)

@@ -1,16 +1,22 @@
 Server:
-  RunMode: debug
-  HttpPort: 8000
+  RunMode: "debug"
+  HttpPort: "8088"
   ReadTimeout: 60
   WriteTimeout: 60
 Database:
-  DBType: mysql
-  UserName: root
-  Password: 11111111
+  DBType: "mysql"
+  UserName: "root"
+  Password: "11111111"
   Host: 127.0.0.1:3306
-  DBName: blog_service
-  TablePrefix: blog_
-  Charset: utf8
-  ParseTime: True
-  MaxIdldConns: 10
+  DBName: "bookManage"
+  TablePrefix: book_
+  Charset: "utf8"
+  ParseTime: "True"
+  MaxIdleConns: 10
   MaxOpenConns: 30
+Log:
+  Level: "Info"
+  Filename: "test.log"
+  MaxSize: 20
+  MaxAge: 10
+  MaxBackups: 7
