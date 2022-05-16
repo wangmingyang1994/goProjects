@@ -1,8 +1,8 @@
 Server:
   RunMode: "debug"
   HttpPort: "8088"
-  ReadTimeout: 60
-  WriteTimeout: 60
+  ReadTimeout: 5
+  WriteTimeout: 5
 Database:
   DBType: "mysql"
   UserName: "root"
@@ -16,7 +16,7 @@ Database:
   MaxOpenConns: 30
 Log:
   Level: "Info"
-  Filename: "test.log"
+  Filename: "logs/test.log"
   MaxSize: 20
   MaxAge: 10
   MaxBackups: 7
