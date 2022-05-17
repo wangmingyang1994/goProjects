@@ -9,11 +9,15 @@ import (
 
 
 func NewRouter () (*gin.Engine){
+	// 创建gin实例
 	r:= gin.New()
-	r.Use(utils.GinLogger(),utils.GinRecovery(true))
+	// 使用中间件
+	r.Use(utils.Authvalidate(),utils.GinLogger(),utils.GinRecovery(true))
+	// 测试路由
 	r.GET("/", func(c *gin.Context) {
 		c.String(http.StatusOK,"hello~")
 	})
+	//创建路由组，注册路由
 	user := v1.NewUser()
 	userServer := r.Group("book/user")
 	{

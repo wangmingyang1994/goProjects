@@ -11,19 +11,19 @@ var jwtSecret=[]byte("books")
 //Claim是一些实体（通常指的用户）的状态和额外的元数据
 type Claims struct{
 	Username string `json:"username"`
-	Password string `json:"password"`
+	UserId int `json:"userId"`
 	jwt.StandardClaims
 }
 
-// 根据用户的用户名和密码产生token
-func GenerateToken(username ,password string)(string,error){
+// 根据用户的用户Id和用户名产生token
+func GenerateToken(username string,userId int)(string,error){
 	//设置token有效时间
 	nowTime:=time.Now()
 	expireTime:=nowTime.Add(3*time.Hour)
 
 	claims:=Claims{
 		Username:       username,
-		Password:       password,
+		UserId:       userId,
 		StandardClaims: jwt.StandardClaims{
 			// 过期时间
 			ExpiresAt:expireTime.Unix(),
@@ -38,9 +38,8 @@ func GenerateToken(username ,password string)(string,error){
 	return token,err
 }
 
-// 根据传入的token值获取到Claims对象信息，（进而获取其中的用户名和密码）
+// 根据传入的token值获取到Claims对象信息，（进而获取其中的用户名）
 func ParseToken(token string)(*Claims,error){
-
 	//用于解析鉴权的声明，方法内部主要是具体的解码和校验的过程，最终返回*Token
 	tokenClaims, err := jwt.ParseWithClaims(token, &Claims{}, func(token *jwt.Token) (interface{}, error) {
 		return jwtSecret, nil
