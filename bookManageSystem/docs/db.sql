@@ -6,3 +6,13 @@ create table users(
                       `user_type` varchar(6) not null,
                       primary key (`user_id`)
 );
+
+create table books(
+                      `book_id` int auto_increment,
+                      `book_name` varchar(10) unique not null,
+                      `book_type` varchar(100) not null,
+                      `book_author` varchar(100) not null,
+                      `book_stock` int not null,
+                      primary key (`book_id`)
+);
+

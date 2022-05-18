@@ -32,7 +32,7 @@ func(u *User)Sign(c *gin.Context){
 		return
 	}
 	// 生成token
-	token,err := utils.GenerateToken(user_name,user.UserId)
+	token,err := utils.GenerateToken(user_name,user.UserId,user.UserType)
 	if err!=nil{
 		utils.NewResponse(c).ToErrorResponse(500,"GenerateToken error")
 		return
@@ -67,7 +67,7 @@ func(u *User)Login(c *gin.Context){
 		return
 	}
 	// 生成token
-	token,err := utils.GenerateToken(user.UserName,user.UserId)
+	token,err := utils.GenerateToken(user.UserName,user.UserId,user.UserType)
 	if err!=nil{
 		utils.NewResponse(c).ToErrorResponse(500,"GenerateToken error")
 		return

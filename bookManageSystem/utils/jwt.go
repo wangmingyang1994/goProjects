@@ -12,11 +12,12 @@ var jwtSecret=[]byte("books")
 type Claims struct{
 	Username string `json:"username"`
 	UserId int `json:"userId"`
+	UserType string`json:"userType"`
 	jwt.StandardClaims
 }
 
-// 根据用户的用户Id和用户名产生token
-func GenerateToken(username string,userId int)(string,error){
+// 根据用户的用户Id和用户名,用户类型，产生token
+func GenerateToken(username string,userId int,userType string)(string,error){
 	//设置token有效时间
 	nowTime:=time.Now()
 	expireTime:=nowTime.Add(3*time.Hour)
@@ -24,6 +25,7 @@ func GenerateToken(username string,userId int)(string,error){
 	claims:=Claims{
 		Username:       username,
 		UserId:       userId,
+		UserType:       userType,
 		StandardClaims: jwt.StandardClaims{
 			// 过期时间
 			ExpiresAt:expireTime.Unix(),
