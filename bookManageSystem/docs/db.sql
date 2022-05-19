@@ -16,3 +16,15 @@ create table books(
                       primary key (`book_id`)
 );
 
+create table `user_book_records`(
+                      `record_id` int auto_increment,
+                      `user_id`int  not null,
+                      `book_id` int  not null,
+                      `book_name` varchar(10)  not null,
+                      `start_date` datetime not null,
+                      `days` int not null,
+                      `book_status` varchar(10)  default '0',
+                      `pass_status` varchar(10) default '0',
+                      primary key (`record_id`)
+);
+

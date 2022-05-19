@@ -15,6 +15,17 @@ type User struct{
 	UserType string //1管理员 0普通用户
 }
 
+type UserBookRecord struct{
+	RecordId int `gorm:"primaryKey"` //记录ID
+	UserId int //用户ID
+	BookId int //书籍ID
+	BookName string //书名
+	StartDate time.Time// 借书申请时间
+	Days int // 借书时长
+	BookStatus string // 0未持有 1已归还 2未归还
+	PassStatus string // 0审核中 1已审核 2已拒绝
+}
+
 func(u *User)Sign(c *gin.Context){
 	// 获取请求参数
 	user_name, ok:=c.GetPostForm("user_name")
@@ -77,12 +88,94 @@ func(u *User)Login(c *gin.Context){
 		gin.H{"token":token, "user_id":user.UserId, "user_name":user.UserName,"user_type":user.UserType})
 }
 
-func(u *User)Action(c *gin.Context){
+
+func(u *User)Message(c *gin.Context){
+	// 解析token，获取用户角色，非管理员无法编辑书籍
+	token:=c.Request.Header["Token"][0]
+	parseToken, _ := utils.ParseToken(token)
+	if parseToken.UserType!="1"{
+		utils.NewResponse(c).ToErrorResponse(400,"No permissions")
+		return
+	}
+	records := make([]UserBookRecord,0,100)
+	// 查询用户的书籍
+	if utils.DB.Model(UserBookRecord{PassStatus: "0"}).Scan(&records).Error!= nil{
+		utils.NewResponse(c).ToErrorResponse(500,"select user books error")
+		return
+	}
+	// 处理返回数据
+	utils.NewResponse(c).ToResponse("select user books success",
+		gin.H{"num_list":len(records), "lists":records})
 
 }
 
-func(u *User)Detail(c *gin.Context){
+func(u *User)Action(c *gin.Context){
+	// 解析token，获取用户角色，非管理员无法编辑书籍
+	token:=c.Request.Header["Token"][0]
+	parseToken, _ := utils.ParseToken(token)
+	if parseToken.UserType!="1"{
+		utils.NewResponse(c).ToErrorResponse(400,"No permissions")
+		return
+	}
+	do, ok:=c.GetPostForm("do")
+	record_id1, ok:=c.GetPostForm("record_id")
+	record_id, _:=strconv.Atoi(record_id1)
+	//0不通过 1通过
+	if !ok{
+		utils.NewResponse(c).ToErrorResponse(400,"parse user message error")
+		return
+	}
+	// 处理审核
+	switch do{
+	case "0":
+		//更新审核状态
+		utils.DB.Model(UserBookRecord{}).Where("record_id=?",record_id).Update("pass_status",2)
+		utils.NewResponse(c).ToResponse("已标记为失败",gin.H{})
+		return
+	case "1":
+		tx := utils.DB.Begin()
+		//更新审核状态，发放书籍
+		if tx.Model(UserBookRecord{}).Where("record_id=?",record_id).Update("pass_status",1).Error!=nil{
+			tx.Rollback()
+			utils.NewResponse(c).ToResponse("操作失败",gin.H{})
+			return
+		}
+		if tx.Model(UserBookRecord{}).Where("record_id=?",record_id).Update("book_status",2).Error!=nil{
+			tx.Rollback()
+			utils.NewResponse(c).ToResponse("操作失败",gin.H{})
+			return
+		}
+		//书架减去库存
+		record:=UserBookRecord{RecordId: record_id}
+		utils.DB.First(&record)
+		bookId:=record.BookId
+		book:=Book{BookId:bookId }
+		utils.DB.First(&book)
+		if tx.Model(Book{}).Where("book_id=?",bookId).Update("book_stock",book.BookStock-1).Error!=nil{
+			tx.Rollback()
+			utils.NewResponse(c).ToResponse("操作失败",gin.H{})
+			return
+		}
+		tx.Commit()
+		utils.NewResponse(c).ToResponse("已审核通过",gin.H{})
+		return
+	}
+}
 
+func(u *User)Books(c *gin.Context){
+	// 解析token，获取用户UserId
+	token:=c.Request.Header["Token"][0]
+	parseToken, _ := utils.ParseToken(token)
+	userId := parseToken.UserId
+	records:= make([]UserBookRecord,0,100)
+	// 查询用户的书籍
+	if utils.DB.Model(UserBookRecord{UserId: userId}).Scan(&records).Error!= nil{
+		utils.NewResponse(c).ToErrorResponse(500,"select user books error")
+		return
+	}
+	// 处理返回数据
+	utils.NewResponse(c).ToResponse("select user books success",
+		gin.H{"userId":userId, "books":records})
 }
 
 func NewUser()*User{

@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"goProjects/bookManageSystem/utils"
 	"strconv"
+	"time"
 )
 
 type Book struct{
@@ -79,11 +80,62 @@ func(b *BookManage)EditBook(c *gin.Context){
 }
 
 func(b *BookManage)BorrowBook(c *gin.Context){
-
+	// 获取userID
+	token:=c.Request.Header["Token"][0]
+	parseToken, _ := utils.ParseToken(token)
+	userId := parseToken.UserId
+	// 获取借书参数
+	bookId_str:=c.PostForm("book_id")
+	bookId,_:=strconv.Atoi(bookId_str)
+	bookName:=c.PostForm("book_name")
+	day_str:=c.PostForm("day")
+	day,_:=strconv.Atoi(day_str)
+	now:= time.Now()
+	// 初始化借书实例
+	record:=UserBookRecord{
+		UserId: userId,
+		BookId: bookId,
+		BookName: bookName,
+		Days: day,
+		StartDate: now,
+	}
+	//借书
+	if utils.DB.Create(&record).Error !=nil{
+		utils.NewResponse(c).ToErrorResponse(500,"borrow book error")
+		return
+	}
+	//处理返回
+	utils.NewResponse(c).ToResponse("borrow book success",
+		gin.H{"records":record})
+	return
 }
 
 func(b *BookManage)ReturnBook(c *gin.Context){
-
+	// 获取还书参数
+	recordId_str:=c.PostForm("record_id")
+	recordId,_:=strconv.Atoi(recordId_str)
+	// 初始化借书实例
+	record:=UserBookRecord{
+		RecordId:recordId,
+	}
+	//查询bookId
+	utils.DB.First(&record)
+	//查询bookstock
+	book:= Book{BookId: record.BookId}
+	utils.DB.First(&book)
+	//还书
+	if utils.DB.Model(UserBookRecord{}).Where("book_id=?",recordId).Update("book_status",1).Error !=nil{
+		utils.NewResponse(c).ToErrorResponse(500,"return book error")
+		return
+	}
+	if utils.DB.Model(Book{}).Where("book_id=?",record.BookId).Update("book_stock",book.BookStock+1).Error!=nil{
+		utils.NewResponse(c).ToErrorResponse(500,"return book error")
+		return
+	}
+	//处理返回
+	utils.NewResponse(c).ToResponse("return book success",
+		gin.H{"records":record})
+	return
 }
 func(b *BookManage)KindOfBooks(c *gin.Context){
 	bookType:=c.Query("book_type")
@@ -111,4 +163,16 @@ func(b *BookManage)BooksDetail(c *gin.Context){
 		gin.H{"bookId":book.BookId,"bookName":book.BookName,
 			"bookType":book.BookType,"bookAuthor":book.BookType,"bookStock":book.BookStock})
 	return
+}
+
+func (b *BookManage) BookKinds(c *gin.Context) {
+	kinds := make([]string,0,10)
+	if utils.DB.Model(Book{}).Distinct("book_type").Scan(&kinds).Error!=nil{
+		utils.NewResponse(c).ToErrorResponse(500,"select book_kinds error")
+		return
+	}
+	utils.NewResponse(c).ToResponse("select book_kinds success",
+		gin.H{"book_kinds":kinds,"num":len(kinds)})
+	return
+
 }

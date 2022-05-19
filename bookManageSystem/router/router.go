@@ -24,7 +24,8 @@ func NewRouter () (*gin.Engine){
 		userServer.POST("/sign", user.Sign)
 		userServer.POST("/login", user.Login)
 		userServer.POST("/action", user.Action)
-		userServer.GET("/detail/:userId", user.Detail)
+		userServer.GET("/books", user.Books)
+		userServer.GET("/message", user.Message)
 
 	}
 	bookManage := v1.NewBookManage()
@@ -34,6 +35,7 @@ func NewRouter () (*gin.Engine){
 		bookManageServer.PUT("/editBook", bookManage.EditBook)
 		bookManageServer.POST("/borrowBook", bookManage.BorrowBook)
 		bookManageServer.POST("/returnBook", bookManage.ReturnBook)
+		bookManageServer.GET("/bookKinds", bookManage.BookKinds)
 		bookManageServer.GET("/kindOfBooks", bookManage.KindOfBooks)
 		bookManageServer.GET("/booksDetail", bookManage.BooksDetail)
 
