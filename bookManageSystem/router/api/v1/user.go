@@ -90,7 +90,7 @@ func(u *User)Login(c *gin.Context){
 
 
 func(u *User)Message(c *gin.Context){
-	// 解析token，获取用户角色，非管理员无法编辑书籍
+	// 解析token，获取用户角色，非管理员获取审核列表
 	token:=c.Request.Header["Token"][0]
 	parseToken, _ := utils.ParseToken(token)
 	if parseToken.UserType!="1"{
@@ -110,7 +110,7 @@ func(u *User)Message(c *gin.Context){
 }
 
 func(u *User)Action(c *gin.Context){
-	// 解析token，获取用户角色，非管理员无法编辑书籍
+	// 解析token，获取用户角色，非管理员无法审核
 	token:=c.Request.Header["Token"][0]
 	parseToken, _ := utils.ParseToken(token)
 	if parseToken.UserType!="1"{
@@ -147,10 +147,10 @@ func(u *User)Action(c *gin.Context){
 		}
 		//书架减去库存
 		record:=UserBookRecord{RecordId: record_id}
-		utils.DB.First(&record)
+		tx.First(&record)
 		bookId:=record.BookId
 		book:=Book{BookId:bookId }
-		utils.DB.First(&book)
+		tx.First(&book)
 		if tx.Model(Book{}).Where("book_id=?",bookId).Update("book_stock",book.BookStock-1).Error!=nil{
 			tx.Rollback()
 			utils.NewResponse(c).ToResponse("操作失败",gin.H{})

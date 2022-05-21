@@ -119,19 +119,23 @@ func(b *BookManage)ReturnBook(c *gin.Context){
 		RecordId:recordId,
 	}
 	//查询bookId
-	utils.DB.First(&record)
+	tx:= utils.DB.Begin()
+	tx.First(&record)
 	//查询bookstock
 	book:= Book{BookId: record.BookId}
-	utils.DB.First(&book)
+	tx.First(&book)
 	//还书
-	if utils.DB.Model(UserBookRecord{}).Where("book_id=?",recordId).Update("book_status",1).Error !=nil{
+	if tx.Model(UserBookRecord{}).Where("book_id=?",recordId).Update("book_status",1).Error !=nil{
+		tx.Rollback()
 		utils.NewResponse(c).ToErrorResponse(500,"return book error")
 		return
 	}
 	if utils.DB.Model(Book{}).Where("book_id=?",record.BookId).Update("book_stock",book.BookStock+1).Error!=nil{
+		tx.Rollback()
 		utils.NewResponse(c).ToErrorResponse(500,"return book error")
 		return
 	}
+	tx.Commit()
 	//处理返回
 	utils.NewResponse(c).ToResponse("return book success",
 		gin.H{"records":record})
@@ -166,6 +170,7 @@ func(b *BookManage)BooksDetail(c *gin.Context){
 }
 
 func (b *BookManage) BookKinds(c *gin.Context) {
+	//获取所有书籍分类
 	kinds := make([]string,0,10)
 	if utils.DB.Model(Book{}).Distinct("book_type").Scan(&kinds).Error!=nil{
 		utils.NewResponse(c).ToErrorResponse(500,"select book_kinds error")

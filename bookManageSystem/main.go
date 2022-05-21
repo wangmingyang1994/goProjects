@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 	"goProjects/bookManageSystem/router"
@@ -31,7 +30,6 @@ func init(){
 }
 
 func main() {
-	fmt.Println(utils.ServerMsg)
 	gin.SetMode(utils.ServerMsg.RunMode)
 	routers := router.NewRouter()
 	s := &http.Server{
