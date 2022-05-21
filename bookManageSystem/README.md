@@ -37,7 +37,7 @@ go build \
 ./bookManageSystem\
 4.请求示例：\
 注册用户：\
-curl --location --request POST '{{host}}/book/user/sign' \
+curl --location --request POST 'http://127.0.0.1:8088/book/user/sign' \
 --form 'user_name="min111"' \
 --form 'password="11222"' \
 --form 'user_type="0"'\
